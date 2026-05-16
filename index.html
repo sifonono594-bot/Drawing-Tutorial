@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تحديات الرسامين ونسخ الأبعاد</title>
+    <style>
+        /* تصميم عصري للموقع */
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            margin-top: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 10px;
+            color: #f1f5f9;
+        }
+
+        /* تصميم قسم التحديات */
+        #prompt-display {
+            font-size: 1.3rem;
+            font-weight: bold;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            color: #38bdf8;
+            padding: 10px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            border: 1px dashed var(--accent-color);
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* تصميم قسم أداة الشبكة */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-btn {
+            background-color: #22c55e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .file-upload-btn:hover {
+            background-color: #16a34a;
+        }
+
+        select {
+            background-color: #334155;
+            color: white;
+            border: 1px solid #475569;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .canvas-container {
+            max-width: 100%;
+            overflow: auto;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            border: 2px solid #475569;
+            border-radius: 6px;
+            background-color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>مِنصة الرّسام الإبداعية</h1>
+        <p>طوّر مهاراتك في رسم الأنمي وتحدّ نفسك وتحكّم بأبعادك</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- قسم توليد التحديات -->
+        <div class="card">
+            <h2>🎲 تحدي الرسم العشوائي</h2>
+            <p style="color: var(--text-muted);">اضغط على الزر للحصول على فكرة رسم مبتكرة تكسر بها روتينك!</p>
+            <div id="prompt-display">اضغط على الزر لبدء التحدي...</div>
+            <button onclick="generatePrompt()">توليد فكرة جديدة</button>
+        </div>
+
+        <!-- قسم أداة الشبكة للتكبير والنقل -->
+        <div class="card">
+            <h2>📐 أداة شبكة الرسم (Grid Tool)</h2>
+            <p style="color: var(--text-muted);">ارفع صورتك واختر حجم الشبكة لنقل الأبعاد بدقة على ورقك</p>
+            
+            <div class="controls">
+                <label for="imageLoader" class="file-upload-btn">📁 اختر صورة</label>
+                <input type="file" id="imageLoader" accept="image/*">
+                
+                <label for="gridSize">حجم الشبكة:</label>
+                <select id="gridSize" onchange="updateGrid()">
+                    <option value="4">4 × 4 (مبتدئ)</option>
+                    <option value="6">6 × 6 (متوسط)</option>
+                    <option value="8">8 × 8 (متقدم)</option>
+                    <option value="12">12 × 12 (تفاصيل دقيقة)</option>
+                </select>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="imageCanvas"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // مصفوفة الأفكار والتحديات
+        const prompts = [
+            "ارسم شخصية أنمي ترتدي جلباباً مغربياً تقليدياً.",
+            "ارسم شخصيتك المفضلة بملامح غاضبة جداً باستخدام 3 ألوان فقط.",
+            "ارسم بطل أنمي في مواجهة ضد وحش آلي عملاق.",
+            "ارسم عين أنمي واقعية جداً تلمع بداخلها النجوم.",
+            "ارسم شخصية أنمي تعزف على آلة موسيقية في ليلة ممطرة.",
+            "ارسم شخصية من اختراعك بأسلوب رسم استوديو جيبلي (Ghibli).",
+            "تحدي: ارسم شخصية أنمي مستخدماً يدك غير المسيطرة (اليسرى مثلاً)!",
+            "ارسم مقاتل ساموراي يستريح تحت شجرة كرز (ساكورا)."
+        ];
+
+        // دالة توليد التحدي العشوائي
+        function generatePrompt() {
+            const randomIndex = Math.floor(Math.random() * prompts.length);
+            document.getElementById('prompt-display').innerText = prompts[randomIndex];
+        }
+
+        // منطق عمل أداة الشبكة (Grid Tool)
+        const imageLoader = document.getElementById('imageLoader');
+        const canvas = document.getElementById('imageCanvas');
+        const ctx = canvas.getContext('2d');
+        let uploadedImg = new Image();
+
+        imageLoader.addEventListener('change', handleImage, false);
+
+        function handleImage(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                uploadedImg.onload = function() {
+                    updateGrid(); // رسم الصورة والشبكة بمجرد التحميل
+                }
+                uploadedImg.src = event.target.result;
+            }
+            if(e.target.files[0]) {
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        }
+
+        function updateGrid() {
+            if (!uploadedImg.src) return; // إذا لم يتم رفع صورة بعد، لا تفعل شيئاً
+
+            // تحديد الحد الأقصى لعرض الصورة داخل المتصفح للحفاظ على التنسيق
+            const maxWidth = 600;
+            let width = uploadedImg.width;
+            let height = uploadedImg.height;
+
+            if (width > maxWidth) {
+                height = (maxWidth / width) * height;
+                width = maxWidth;
+            }
+
+            // ضبط حجم الكانفاس ليناسب أبعاد الصورة المعدلة
+            canvas.width = width;
+            canvas.height = height;
+
+            // رسم الصورة الأصلية أولاً
+            ctx.drawImage(uploadedImg, 0, 0, width, height);
+
+            // جلب حجم التقسيم المختار من القائمة
+            const gridSize = parseInt(document.getElementById('gridSize').value);
+            
+            // إعدادات خطوط الشبكة (اللون والسمك)
+            ctx.strokeStyle = "rgba(239, 68, 68, 0.8)"; // لون أحمر شفاف ومريح للعين
+            ctx.lineWidth = 2;
+
+            // رسم الخطوط العمودية
+            for (let i = 1; i < gridSize; i++) {
+                let x = (width / gridSize) * i;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+
+            // رسم الخطوط الأفقية
+            for (let i = 1; i < gridSize; i++) {
+                let y = (height / gridSize) * i;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+        }
+    </script>
+</body>
+</html>
+
