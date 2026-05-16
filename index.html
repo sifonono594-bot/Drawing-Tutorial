@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- كود التحقق الجديد الخاص بك من جوجل (Google Search Console) -->
     <meta name="google-site-verification" content="t0ed9FUineBP14YeWG9t2ZB0kAJbPcNmVAdm-TzIUK0" />
     
-    <!-- كلمات الوصف لتهيئة الموقع لمحركات البحث (SEO) -->
     <meta name="description" content="منصة إبداعية مخصصة لرسامي الأنمي، تحتوي على مولد تحديات رسم عشوائية وأداة شبكة الرسم (Grid Tool) لتقسيم الصور ونقل الأبعاد بدقة على الورق.">
     <meta name="keywords" content="رسم أنمي, تحديات رسم, أداة شبكة الرسم, تعلم الرسم, تقسيم الصور للرسم, منصة الرسام">
     
     <title>منصة الرسام الإبداعية - تحديات وأداة شبكة الرسم</title>
     
+    <script type='text/javascript' src='//pl26053351.highratecpm.com/bd/9d/23/bd9d233c7f918451fdb3d8ca5becc396.js'></script>
+    
     <style>
-        /* تصميم عصري للموقع */
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
@@ -37,7 +36,7 @@
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         header h1 {
@@ -73,7 +72,17 @@
             color: #f1f5f9;
         }
 
-        /* تصميم قسم التحديات */
+        /* حاويات الإعلانات */
+        .ad-container {
+            width: 100%;
+            margin: 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            min-height: 90px;
+        }
+
         #prompt-display {
             font-size: 1.3rem;
             font-weight: bold;
@@ -105,7 +114,6 @@
             background-color: var(--accent-hover);
         }
 
-        /* تصميم قسم أداة الشبكة */
         .controls {
             display: flex;
             flex-wrap: wrap;
@@ -160,6 +168,14 @@
 </head>
 <body>
 
+    <div class="ad-container">
+        <div id="container-29369146"></div>
+        <script async="async" data-cfasync="false" src="//pl26053351.highratecpm.com/29369146/invoke.js"></script>
+        <script type="text/javascript">
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
     <header>
         <h1>مِنصة الرّسام الإبداعية</h1>
         <p>طوّر مهاراتك في رسم الأنمي وتحدّ نفسك وتحكّم بأبعادك</p>
@@ -167,7 +183,6 @@
 
     <div class="container">
         
-        <!-- قسم توليد التحديات -->
         <div class="card">
             <h2>🎲 تحدي الرسم العشوائي</h2>
             <p style="color: var(--text-muted);">اضغط على الزر للحصول على فكرة رسم مبتكرة تكسر بها روتينك!</p>
@@ -175,7 +190,6 @@
             <button onclick="generatePrompt()">توليد فكرة جديدة</button>
         </div>
 
-        <!-- قسم أداة الشبكة للتكبير والنقل -->
         <div class="card">
             <h2>📐 أداة شبكة الرسم (Grid Tool)</h2>
             <p style="color: var(--text-muted);">ارفع صورتك واختر حجم الشبكة لنقل الأبعاد بدقة على ورقك</p>
@@ -198,10 +212,22 @@
             </div>
         </div>
 
+        <div class="ad-container">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '0bd2032e84d41e2b5db3d8ca5becc396',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//pl26053351.highratecpm.com/0bd2032e84d41e2b5db3d8ca5becc396/invoke.js"></script>
+        </div>
+
     </div>
 
     <script>
-        // مصفوفة الأفكار والتحديات
         const prompts = [
             "ارسم شخصية أنمي ترتدي جلباباً مغربياً تقليدياً.",
             "ارسم شخصيتك المفضلة بملامح غاضبة جداً باستخدام 3 ألوان فقط.",
@@ -213,13 +239,11 @@
             "ارسم مقاتل ساموراي يستريح تحت شجرة كرز (ساكورا)."
         ];
 
-        // دالة توليد التحدي العشوائي
         function generatePrompt() {
             const randomIndex = Math.floor(Math.random() * prompts.length);
             document.getElementById('prompt-display').innerText = prompts[randomIndex];
         }
 
-        // منطق عمل أداة الشبكة (Grid Tool)
         const imageLoader = document.getElementById('imageLoader');
         const canvas = document.getElementById('imageCanvas');
         const ctx = canvas.getContext('2d');
