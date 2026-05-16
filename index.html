@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة تحديات الرسامين ونسخ الأبعاد</title>
+    
+    <!-- كود التحقق الجديد الخاص بك من جوجل (Google Search Console) -->
+    <meta name="google-site-verification" content="t0ed9FUineBP14YeWG9t2ZB0kAJbPcNmVAdm-TzIUK0" />
+    
+    <!-- كلمات الوصف لتهيئة الموقع لمحركات البحث (SEO) -->
+    <meta name="description" content="منصة إبداعية مخصصة لرسامي الأنمي، تحتوي على مولد تحديات رسم عشوائية وأداة شبكة الرسم (Grid Tool) لتقسيم الصور ونقل الأبعاد بدقة على الورق.">
+    <meta name="keywords" content="رسم أنمي, تحديات رسم, أداة شبكة الرسم, تعلم الرسم, تقسيم الصور للرسم, منصة الرسام">
+    
+    <title>منصة الرسام الإبداعية - تحديات وأداة شبكة الرسم</title>
+    
     <style>
         /* تصميم عصري للموقع */
         :root {
@@ -222,7 +231,7 @@
             const reader = new FileReader();
             reader.onload = function(event) {
                 uploadedImg.onload = function() {
-                    updateGrid(); // رسم الصورة والشبكة بمجرد التحميل
+                    updateGrid();
                 }
                 uploadedImg.src = event.target.result;
             }
@@ -232,9 +241,8 @@
         }
 
         function updateGrid() {
-            if (!uploadedImg.src) return; // إذا لم يتم رفع صورة بعد، لا تفعل شيئاً
+            if (!uploadedImg.src) return;
 
-            // تحديد الحد الأقصى لعرض الصورة داخل المتصفح للحفاظ على التنسيق
             const maxWidth = 600;
             let width = uploadedImg.width;
             let height = uploadedImg.height;
@@ -244,21 +252,16 @@
                 width = maxWidth;
             }
 
-            // ضبط حجم الكانفاس ليناسب أبعاد الصورة المعدلة
             canvas.width = width;
             canvas.height = height;
 
-            // رسم الصورة الأصلية أولاً
             ctx.drawImage(uploadedImg, 0, 0, width, height);
 
-            // جلب حجم التقسيم المختار من القائمة
             const gridSize = parseInt(document.getElementById('gridSize').value);
             
-            // إعدادات خطوط الشبكة (اللون والسمك)
-            ctx.strokeStyle = "rgba(239, 68, 68, 0.8)"; // لون أحمر شفاف ومريح للعين
+            ctx.strokeStyle = "rgba(239, 68, 68, 0.8)"; 
             ctx.lineWidth = 2;
 
-            // رسم الخطوط العمودية
             for (let i = 1; i < gridSize; i++) {
                 let x = (width / gridSize) * i;
                 ctx.beginPath();
@@ -267,7 +270,6 @@
                 ctx.stroke();
             }
 
-            // رسم الخطوط الأفقية
             for (let i = 1; i < gridSize; i++) {
                 let y = (height / gridSize) * i;
                 ctx.beginPath();
