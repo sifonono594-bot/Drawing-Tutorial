@@ -3,314 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta name="monetag" content="51902ddf1d131a26b66575c4c35eb987">
-    
-    <meta name="google-site-verification" content="t0ed9FUineBP14YeWG9t2ZB0kAJbPcNmVAdm-TzIUK0" />
-    
-    <meta name="description" content="منصة إبداعية مخصصة لرسامي الأنمي، تحتوي على مولد تحديات رسم عشوائية وأداة شبكة الرسم (Grid Tool) لتقسيم الصور ونقل الأبعاد بدقة على الورق.">
-    <meta name="keywords" content="رسم أنمي, تحديات رسم, أداة شبكة الرسم, تعلم الرسم, تقسيم الصور للرسم, منصة الرسام">
-    
-    <title>منصة الرسام الإبداعية - تحديات وأداة شبكة الرسم</title>
-    
-    <script type='text/javascript' src='//pl26053351.highratecpm.com/bd/9d/23/bd9d233c7f918451fdb3d8ca5becc396.js'></script>
-    
+    <title>سينما الأصدقاء - النسخة الذكية 🍿💬</title>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #6366f1;
-            --accent-hover: #4f46e5;
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0b0b0f; color: #e2e8f0; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 100%; max-width: 550px; background: #15151e; padding: 15px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.7); box-sizing: border-box; }
+        .panel { background: #1f1f2e; padding: 12px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #2d2d44; }
+        input, button { padding: 10px; border-radius: 8px; border: none; font-size: 14px; margin: 4px 0; box-sizing: border-box; }
+        input { background: #2a2a3d; color: white; width: 100%; border: 1px solid #3f3f5c; }
+        .btn-main { background-color: #e50914; color: white; cursor: pointer; font-weight: bold; width: 100%; }
+        
+        /* حاوية الفيديو والقفل */
+        .video-wrapper { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; border-radius: 12px; overflow: hidden; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .video-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
+        .video-overlay.locked { pointer-events: auto; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        /* الزر الذكي الموحد (تم تصغيره بناءً على طلبك) */
+        .controls-box { background: #1f1f2e; padding: 12px; border-radius: 12px; margin-top: 10px; border: 1px solid #2d2d44; text-align: center; }
+        .btn-toggle { background: #e50914; color: white; border: none; padding: 5px; border-radius: 50px; font-size: 20px; cursor: pointer; transition: 0.3s; width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; margin: 10px auto; }
+        .btn-toggle:active { transform: scale(0.9); }
+        
+        /* شريط المشاهدة */
+        .timeline-container { display: flex; align-items: center; gap: 8px; width: 100%; margin-bottom: 10px; }
+        .time-label { font-size: 12px; font-family: monospace; color: #94a3b8; }
+        .custom-timeline { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #475569; outline: none; }
+        .custom-timeline::-webkit-slider-thumb { -webkit-appearance: none; width: 15px; height: 15px; border-radius: 50%; background: #e50914; cursor: pointer; }
 
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        /* الشات */
+        .chat-box { background: #1f1f2e; border-radius: 12px; margin-top: 15px; border: 1px solid #2d2d44; overflow: hidden; display: flex; flex-direction: column; }
+        .chat-messages { height: 120px; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background: #111116; }
+        .msg { padding: 6px 10px; border-radius: 8px; max-width: 80%; font-size: 13px; }
+        .msg.me { background: #3b82f6; align-self: flex-start; }
+        .msg.friend { background: #2a2a3d; align-self: flex-end; }
+        .chat-input-row { display: flex; padding: 5px; gap: 5px; }
 
-        header h1 {
-            color: var(--accent-color);
-            margin-bottom: 5px;
-        }
-
-        header p {
-            color: var(--text-muted);
-            margin-top: 0;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        h2 {
-            margin-top: 0;
-            border-bottom: 2px solid #334155;
-            padding-bottom: 10px;
-            color: #f1f5f9;
-        }
-
-        /* تنسيق مرن للحاويات الإعلانية ليناسب شاشات الهواتف */
-        .ad-container {
-            width: 100%;
-            max-width: 100%;
-            min-height: 90px;
-            margin: 15px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .ad-container iframe, .ad-container script {
-            max-width: 100%;
-            height: auto;
-        }
-
-        #prompt-display {
-            font-size: 1.3rem;
-            font-weight: bold;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-            color: #38bdf8;
-            padding: 10px;
-            background: rgba(99, 102, 241, 0.1);
-            border-radius: 8px;
-            border: 1px dashed var(--accent-color);
-        }
-
-        button {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background-color: var(--accent-hover);
-        }
-
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .file-upload-btn {
-            background-color: #22c55e;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .file-upload-btn:hover {
-            background-color: #16a34a;
-        }
-
-        select {
-            background-color: #334155;
-            color: white;
-            border: 1px solid #475569;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .canvas-container {
-            max-width: 100%;
-            overflow: auto;
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-        }
-
-        canvas {
-            max-width: 100%;
-            border: 2px solid #475569;
-            border-radius: 6px;
-            background-color: #0f172a;
-        }
+        .peer-id-text { background: #0b0b0f; padding: 8px; border-radius: 6px; color: #f59e0b; font-family: monospace; text-align: center; font-size: 12px; cursor: pointer; border: 1px dashed #f59e0b; }
+        
+        /* تصميم صفحة العداد والاسم */
+        .user-info-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+        .room-counter { background: #2a2a3d; padding: 8px 12px; border-radius: 8px; font-size: 14px; display: flex; align-items: center; gap: 5px; white-space: nowrap; font-weight: bold; border: 1px solid #3f3f5c; }
     </style>
 </head>
 <body>
 
-    <div class="ad-container">
-        <div id="container-29369146"></div>
-        <script async="async" data-cfasync="false" src="//pl26053351.highratecpm.com/29369146/invoke.js"></script>
-        <script type="text/javascript">
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
-
-    <header>
-        <h1>مِنصة الرّسام الإبداعية</h1>
-        <p>طوّر مهاراتك في رسم الأنمي وتحدّ نفسك وتحكّم بأبعادك</p>
-    </header>
-
+    <h1>🍿 سينما الأصدقاء</h1>
+    
     <div class="container">
-        
-        <div class="card">
-            <h2>🎲 تحدي الرسم العشوائي</h2>
-            <p style="color: var(--text-muted);">اضغط على الزر للحصول على فكرة رسم مبتكرة تكسر بها روتينك!</p>
-            <div id="prompt-display">اضغط على الزر لبدء التحدي...</div>
-            <button onclick="generatePrompt()">توليد فكرة جديدة</button>
-        </div>
-
-        <div class="card">
-            <h2>📐 أداة شبكة الرسم (Grid Tool)</h2>
-            <p style="color: var(--text-muted);">ارفع صورتك واختر حجم الشبكة لنقل الأبعاد بدقة على ورقك</p>
-            
-            <div class="controls">
-                <label for="imageLoader" class="file-upload-btn">📁 اختر صورة</label>
-                <input type="file" id="imageLoader" accept="image/*">
-                
-                <label for="gridSize">حجم الشبكة:</label>
-                <select id="gridSize" onchange="updateGrid()">
-                    <option value="4">4 × 4 (مبتدئ)</option>
-                    <option value="6">6 × 6 (متوسط)</option>
-                    <option value="8">8 × 8 (متقدم)</option>
-                    <option value="12">12 × 12 (تفاصيل دقيقة)</option>
-                </select>
+        <div class="panel">
+            <div class="user-info-row">
+                <input type="text" id="user-name" placeholder="اكتب اسمك هنا..." style="margin: 0; flex-grow: 1;">
+                <div class="room-counter">
+                    👤 <span id="participant-count">1</span>
+                </div>
             </div>
 
-            <div class="canvas-container">
-                <canvas id="imageCanvas"></canvas>
+            <input type="text" id="ytUrl" placeholder="رابط يوتيوب هنا...">
+            <button class="btn-main" onclick="changeVideo()">تحديث الفيديو 🔄</button>
+            <div id="my-id" class="peer-id-text" onclick="navigator.clipboard.writeText(this.innerText); alert('تم نسخ الكود!');">جاري التجهيز...</div>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="friend-id" placeholder="كود الصديق...">
+                <button onclick="connectToFriend()" style="background:#3b82f6; color:white;">اتصال</button>
             </div>
         </div>
 
-        <div class="ad-container">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '0bd2032e84d41e2b5db3d8ca5becc396',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//pl26053351.highratecpm.com/0bd2032e84d41e2b5db3d8ca5becc396/invoke.js"></script>
+        <div class="video-wrapper">
+            <div id="overlay" class="video-overlay"></div>
+            <div id="player"></div>
         </div>
 
+        <div class="controls-box">
+            <div class="timeline-container">
+                <span id="currentTime" class="time-label">00:00</span>
+                <input type="range" id="timeline" class="custom-timeline" min="0" max="100" value="0" oninput="timelineDragged(this.value)">
+                <span id="duration" class="time-label">00:00</span>
+            </div>
+            <button id="toggleBtn" class="btn-toggle" onclick="togglePlay()">▶</button>
+        </div>
+
+        <div class="chat-box">
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input-row">
+                <input type="text" id="chatInput" placeholder="اكتب لرفيقك..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                <button onclick="sendChatMessage()" style="background:#10b981; color:white;">إرسال</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        const prompts = [
-            "ارسم شخصية أنمي ترتدي جلباباً مغربياً تقليدياً.",
-            "ارسم شخصيتك المفضلة بملامح غاضبة جداً باستخدام 3 ألوان فقط.",
-            "ارسم بطل أنمي في مواجهة ضد وحش آلي عملاق.",
-            "ارسم عين أنمي واقعية جداً تلمع بداخلها النجوم.",
-            "ارسم شخصية أنمي تعزف على آلة موسيقية في ليلة ممطرة.",
-            "ارسم شخصية من اختراعك بأسلوب رسم استوديو جيبلي (Ghibli).",
-            "تحدي: ارسم شخصية أنمي مستخدماً يدك غير المسيطرة (اليسرى مثلاً)!",
-            "ارسم مقاتل ساموراي يستريح تحت شجرة كرز (ساكورا)."
-        ];
+        let player;
+        
+        // دالة توليد معرف من 7 أرقام فقط
+        function generate7DigitId() {
+            return Math.floor(1000000 + Math.random() * 9000000).toString();
+        }
+        
+        const myCustomId = generate7DigitId();
+        let peer = new Peer(myCustomId); // إنشاء الـ Peer بالمعرف المكون من 7 أرقام
+        let conn = null;
+        let isPlaying = false;
+        let isRemoteAction = false;
+        const overlay = document.getElementById('overlay');
+        const toggleBtn = document.getElementById('toggleBtn');
 
-        function generatePrompt() {
-            const randomIndex = Math.floor(Math.random() * prompts.length);
-            document.getElementById('prompt-display').innerText = prompts[randomIndex];
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '100%', width: '100%',
+                videoId: 'EdhzTQD7hnU',
+                playerVars: { 'controls': 1, 'rel': 0 },
+                events: { 'onReady': onPlayerReady }
+            });
         }
 
-        const imageLoader = document.getElementById('imageLoader');
-        const canvas = document.getElementById('imageCanvas');
-        const ctx = canvas.getContext('2d');
-        let uploadedImg = new Image();
-
-        imageLoader.addEventListener('change', handleImage, false);
-
-        function handleImage(e) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                uploadedImg.onload = function() {
-                    updateGrid();
+        function onPlayerReady() {
+            setInterval(() => {
+                if (!player || isRemoteAction) return;
+                const state = player.getPlayerState();
+                
+                if (state === 1 && !isPlaying) {
+                    updateUI(true);
+                    sendSignal({ type: 'play', time: player.getCurrentTime() });
+                } 
+                else if (state === 2 && isPlaying) {
+                    updateUI(false);
+                    sendSignal({ type: 'pause', time: player.getCurrentTime() });
                 }
-                uploadedImg.src = event.target.result;
-            }
-            if(e.target.files[0]) {
-                reader.readAsDataURL(e.target.files[0]);
+                updateTimeline();
+            }, 100);
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
             }
         }
 
-        function updateGrid() {
-            if (!uploadedImg.src) return;
+        function updateUI(play) {
+            isPlaying = play;
+            toggleBtn.textContent = play ? '⏸' : '▶';
+            if (play) overlay.classList.add('locked');
+            else overlay.classList.remove('locked');
+        }
 
-            const maxWidth = 600;
-            let width = uploadedImg.width;
-            let height = uploadedImg.height;
-
-            if (width > maxWidth) {
-                height = (maxWidth / width) * height;
-                width = maxWidth;
+        function updateTimeline() {
+            if (player && player.getDuration) {
+                const cur = player.getCurrentTime();
+                const dur = player.getDuration();
+                document.getElementById('timeline').value = (cur / dur) * 100 || 0;
+                document.getElementById('currentTime').textContent = formatTime(cur);
+                document.getElementById('duration').textContent = formatTime(dur);
             }
+        }
 
-            canvas.width = width;
-            canvas.height = height;
+        function formatTime(s) {
+            let m = Math.floor(s / 60); s = Math.floor(s % 60);
+            return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+        }
 
-            ctx.drawImage(uploadedImg, 0, 0, width, height);
+        peer.on('open', (id) => { document.getElementById('my-id').textContent = id; });
+        
+        // عندما يتصل بك شخص آخر
+        peer.on('connection', (c) => { 
+            conn = c; 
+            setupSync(); 
+        });
 
-            const gridSize = parseInt(document.getElementById('gridSize').value);
+        // عندما تقوم أنت بالاتصال بصديقك
+        function connectToFriend() {
+            const friendId = document.getElementById('friend-id').value.trim();
+            if (!friendId) return;
+            conn = peer.connect(friendId);
             
-            ctx.strokeStyle = "rgba(239, 68, 68, 0.8)"; 
-            ctx.lineWidth = 2;
+            conn.on('open', () => {
+                const myName = document.getElementById('user-name').value.trim() || "مجهول";
+                sendSignal({ type: 'join', name: myName });
+            });
+            
+            setupSync();
+        }
 
-            for (let i = 1; i < gridSize; i++) {
-                let x = (width / gridSize) * i;
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.stroke();
-            }
+        function setupSync() {
+            conn.on('data', (data) => {
+                // نظام الإشعارات وتبادل الأسماء والعداد عند الاتصال
+                if (data.type === 'join') {
+                    appendNotification(`تم اتصال بالغرفة: ${data.name}`);
+                    document.getElementById('participant-count').textContent = "2";
+                    const myName = document.getElementById('user-name').value.trim() || "مجهول";
+                    sendSignal({ type: 'welcome', name: myName });
+                    return;
+                }
+                if (data.type === 'welcome') {
+                    appendNotification(`تم اتصال بالغرفة: ${data.name}`);
+                    document.getElementById('participant-count').textContent = "2";
+                    return;
+                }
+                if (data.type === 'chat') { appendMessage(data.text, 'friend'); return; }
+                
+                isRemoteAction = true; 
+                if (data.type === 'play') {
+                    player.seekTo(data.time, true);
+                    player.playVideo();
+                    updateUI(true);
+                } else if (data.type === 'pause') {
+                    player.pauseVideo();
+                    player.seekTo(data.time, true);
+                    updateUI(false);
+                } else if (data.type === 'change') {
+                    player.loadVideoById(data.id);
+                } else if (data.type === 'seek') {
+                    player.seekTo(data.time, true);
+                }
+                setTimeout(() => { isRemoteAction = false; }, 500);
+            });
 
-            for (let i = 1; i < gridSize; i++) {
-                let y = (height / gridSize) * i;
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
+            // عند انقطاع الاتصال أو خروج الصديق
+            conn.on('close', () => {
+                document.getElementById('participant-count').textContent = "1";
+                appendNotification("غادر الطرف الآخر الغرفة");
+            });
+        }
+
+        function sendSignal(data) {
+            if (conn && conn.open) conn.send(data);
+        }
+
+        function timelineDragged(v) {
+            if (!player) return;
+            const target = (v / 100) * player.getDuration();
+            player.seekTo(target, true);
+            sendSignal({ type: 'seek', time: target });
+        }
+
+        function sendChatMessage() {
+            const val = document.getElementById('chatInput').value;
+            if (!val) return;
+            appendMessage(val, 'me');
+            sendSignal({ type: 'chat', text: val });
+            document.getElementById('chatInput').value = '';
+        }
+
+        function appendMessage(t, s) {
+            const d = document.createElement('div');
+            d.className = 'msg ' + s;
+            d.textContent = t;
+            const box = document.getElementById('chatMessages');
+            box.appendChild(d);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        // دالة مخصصة لإظهار إشعارات النظام بلون مميز داخل الشات
+        function appendNotification(text) {
+            const d = document.createElement('div');
+            d.style.cssText = "background: rgba(245, 158, 11, 0.15); color: #f59e0b; text-align: center; font-size: 13px; padding: 6px; border-radius: 8px; margin: 5px 0; width: 100%; box-sizing: border-box; font-weight: bold;";
+            d.textContent = text;
+            const box = document.getElementById('chatMessages');
+            box.appendChild(d);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function changeVideo() {
+            const url = document.getElementById('ytUrl').value;
+            const match = url.match(/[?&]v=([^&#]+)/);
+            const id = match ? match[1] : url;
+            if (id.length === 11) {
+                player.loadVideoById(id);
+                sendSignal({ type: 'change', id: id });
             }
         }
     </script>
 </body>
 </html>
-
