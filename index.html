@@ -572,11 +572,16 @@
 
         function changeVideo() {
             const url = document.getElementById('ytUrl').value;
-            const match = url.match(/[?&]v=([^&#]+)/);
-            const id = match ? match[1] : url;
+            // استخراج الـ ID من الرابط سواء كان طويل (watch?v=) أو قصير (youtu.be/)
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            const id = (match && match[2].length === 11) ? match[2] : url.trim();
+
             if (id.length === 11) {
                 player.loadVideoById(id);
                 sendSignal({ type: 'change', id: id });
+            } else {
+                alert("يرجى إدخال رابط يوتيوب صحيح");
             }
         }
     </script>
